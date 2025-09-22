@@ -28,6 +28,7 @@ public class ConfiguracoesSeguranca  {
 				.authorizeHttpRequests(authorize -> authorize
 						.requestMatchers(HttpMethod.POST,"usuario").permitAll()
 						.requestMatchers(HttpMethod.POST,"login").permitAll()
+						.requestMatchers(HttpMethod.POST,"tarefas").authenticated()				
 						.anyRequest().authenticated())
 				.addFilterAt(confAuthentication, UsernamePasswordAuthenticationFilter.class)
 						.build();
