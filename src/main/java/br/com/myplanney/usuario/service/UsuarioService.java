@@ -1,10 +1,10 @@
-package br.com.myplanney.service;
+package br.com.myplanney.usuario.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.myplanney.model.Usuario;
-import br.com.myplanney.repository.UsuarioRepository;
+import br.com.myplanney.usuario.model.Usuario;
+import br.com.myplanney.usuario.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {

@@ -1,10 +1,10 @@
-package br.com.myplanney.model.agenda;
+package br.com.myplanney.agenda.model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-import br.com.myplanney.model.tarefas.Tarefas;
+import br.com.myplanney.tarefas.model.Tarefas;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package br.com.myplanney.model.agenda;
+package br.com.myplanney.agenda.model;
 
 public class CategoriaAgenda {
 

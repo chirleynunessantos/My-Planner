@@ -1,6 +1,6 @@
-package br.com.myplanney.model.habitos;
+package br.com.myplanney.habitos.model;
 
-import br.com.myplanney.model.tarefas.Tarefas;
+import br.com.myplanney.tarefas.model.Tarefas;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Builder;

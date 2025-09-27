@@ -1,4 +1,4 @@
-package br.com.myplanney.controller;
+package br.com.myplanney.tarefas.controller;
 
 import java.util.Optional;
 
@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.myplanney.model.Usuario;
-import br.com.myplanney.model.tarefas.Tarefas;
-import br.com.myplanney.repository.TarefasRepository;
+import br.com.myplanney.tarefas.model.Tarefas;
+import br.com.myplanney.tarefas.repository.TarefasRepository;
+import br.com.myplanney.tarefas.service.TarefasServices;
+import br.com.myplanney.usuario.model.Usuario;
 
 @RestController
 @RequestMapping("tarefas")
@@ -22,11 +23,15 @@ public class TarefasController {
 
 	@Autowired
 	TarefasRepository repository;
+	@Autowired
+	TarefasServices service;
 	
 	@PostMapping
 	public ResponseEntity salvar(@RequestBody Tarefas tarefas) {
-		repository.save(tarefas);
-	return ResponseEntity.ok().build();
+		
+		
+		service.salvar(tarefas);
+	return ResponseEntity.ok(tarefas);
 	}
 	
 	@PutMapping

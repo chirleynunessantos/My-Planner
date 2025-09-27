@@ -21,27 +21,29 @@ public class ConfiguracoesSeguranca  {
 	@Autowired 
 	ConfAuthentication confAuthentication;
 	
+	@Autowired
+	UsuarioDetailsSeviceImpl usuarioDetailsSeviceImpl;
+	
 	@Bean
 	SecurityFilterChain filtrosSeguranca(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity.csrf(csrf->csrf.disable())
 				.sessionManagement(session-> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize
-						.requestMatchers(HttpMethod.POST,"usuario").permitAll()
-						.requestMatchers(HttpMethod.POST,"login").permitAll()
-						.requestMatchers(HttpMethod.POST,"tarefas").authenticated()				
+						.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+						.requestMatchers(HttpMethod.POST, "/auth/registrar").permitAll()
 						.anyRequest().authenticated())
-				.addFilterAt(confAuthentication, UsernamePasswordAuthenticationFilter.class)
-						.build();
+				.addFilterBefore(confAuthentication, UsernamePasswordAuthenticationFilter.class)
+				.build();
 		
 	}
 
-	@Bean
-	public PasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-		return authenticationConfiguration.getAuthenticationManager();
-	}
+	  @Bean
+	    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+	        return authenticationConfiguration.getAuthenticationManager();
+	    }
+
+	    @Bean
+	    public PasswordEncoder passwordEncoder(){
+	        return new BCryptPasswordEncoder();
+	    }
 }

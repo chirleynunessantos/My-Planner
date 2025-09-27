@@ -1,4 +1,4 @@
-package br.com.myplanney.model.metas;
+package br.com.myplanney.metas.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

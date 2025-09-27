@@ -1,4 +1,4 @@
-package br.com.myplanney.model.tarefas;
+package br.com.myplanney.tarefas.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
