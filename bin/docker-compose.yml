@@ -1,0 +1,17 @@
+version: '2.4'
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: myplanney-sqlserver
+    restart: always
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "Password123@123"
+      MSSQL_PID: "Developer"
+    ports:
+      - "14330:1433"
+    volumes:
+      - myplanney_db:/var/opt/mssql
+
+volumes:
+  myplanney_db:
