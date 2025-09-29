@@ -14,6 +14,7 @@ public interface UsuarioMapper {
 	@Mapping(target="id", ignore=true)
 	Usuario paraUsuario(UsuarioRequestDTO usuarioRequestDTO);
 	
-	@Mapping(target="id", ignore=true) // Geralmente, o ID não deve ser ignorado no DTO de resposta.
+// Geralmente, o ID não deve ser ignorado no DTO de resposta.
+
 	UsuarioResponseDTO paraUsuarioDTO(Usuario usuario);
 }

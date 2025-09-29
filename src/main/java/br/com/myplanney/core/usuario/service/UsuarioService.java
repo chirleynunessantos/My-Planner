@@ -1,35 +1,39 @@
 package br.com.myplanney.core.usuario.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.myplanney.core.usuario.model.Usuario;
 import br.com.myplanney.core.usuario.repository.UsuarioRepository;
+import br.com.myplanney.dto.request.UsuarioRequestDTO;
+import br.com.myplanney.dto.response.UsuarioResponseDTO;
 import br.com.myplanney.exceptions.UsuarioJaCadastradoException;
-
+import br.com.myplanney.mapper.UsuarioMapper;
+import lombok.RequiredArgsConstructor;
 
 @Service
+
 public class UsuarioService {
-	
-	private final UsuarioRepository repository;	
-	private final PasswordEncoder  passwordEncoder;
-	
-	public UsuarioService(UsuarioRepository repository, PasswordEncoder passwordEncoder) {
-		super();
-		this.repository = repository;
-		this.passwordEncoder = passwordEncoder;
-	}
 
-	public Usuario salvarUsuario(Usuario usuario) {			
-		
-		if (this.repository.findByEmail(usuario.getUsername()).isPresent()) {
-			 throw  new UsuarioJaCadastradoException("Email já cadastrado");
+	@Autowired
+	private UsuarioRepository repository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private UsuarioMapper mapper;
+
+	public UsuarioResponseDTO salvarUsuario(UsuarioRequestDTO usuarioDTO) {
+
+		String senhaCodificada = passwordEncoder.encode(usuarioDTO.senha());
+
+		Usuario usuarioAlterado = new Usuario(usuarioDTO.email(), usuarioDTO.nome(), senhaCodificada,
+				usuarioDTO.role());
+
+		if (this.repository.findByEmail(usuarioAlterado.getUsername()).isPresent()) {
+			throw new UsuarioJaCadastradoException("Email já cadastrado");
 		}
-
-		String senhaCodificada = passwordEncoder.encode(usuario.getPassword());
-
-		Usuario usuarioAlterado = new Usuario(usuario.getEmail(), usuario.getNome(), senhaCodificada, usuario.getRole());
-		
-		return repository.save(usuario);
+		repository.save(usuarioAlterado);
+		return mapper.paraUsuarioDTO(usuarioAlterado);
 	}
 }

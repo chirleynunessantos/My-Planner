@@ -18,10 +18,10 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+
 public class UsuarioController {
 
-	private final UsuarioMapper mapper;
+	
 
 	private final UsuarioService service;
 
@@ -32,14 +32,21 @@ public class UsuarioController {
 	private final AuthenticationManager authenticationManager;
 	
 
+	public UsuarioController( UsuarioService service, UsuarioRepository usuarioRepository,
+			TokenService tokenService, AuthenticationManager authenticationManager) {
+		super();
+		
+		this.service = service;
+		this.usuarioRepository = usuarioRepository;
+		this.tokenService = tokenService;
+		this.authenticationManager = authenticationManager;
+	}
+
+
 	@PostMapping("/registrar")
 	public ResponseEntity<UsuarioResponseDTO> salvarUsuario(@RequestBody UsuarioRequestDTO usuarioDto) {
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body(
-					mapper.paraUsuarioDTO(
-							this.service.salvarUsuario(mapper.paraUsuario(usuarioDto))
-							)
-					);
+		
+		return 	ResponseEntity.status(HttpStatus.CREATED).body(service.salvarUsuario(usuarioDto));
 	}
 
 
