@@ -5,31 +5,39 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import br.com.myplanney.core.enuns.Prioridade;
 import br.com.myplanney.core.tarefas.model.Tarefas;
 import br.com.myplanney.core.tarefas.repository.TarefasRepository;
 import br.com.myplanney.core.usuario.model.Usuario;
 import br.com.myplanney.core.usuario.repository.UsuarioRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
 
 @Service
 public class TarefasServices {
 
 	@Autowired
 	TarefasRepository repository;
-	
 	@Autowired
 	UsuarioRepository usuarioRepository;
 	
 	public void salvar( Tarefas tarefas) {
-		String email =  (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String email = authentication.getName();
+	    
+	    Usuario usuario = (Usuario) usuarioRepository.findByEmail(email).orElseThrow();
+	    Long id;
 		
-	//	UserDetails usuario = usuarioRepository.findByEmail(email);
-	//	tarefas.setId(usuario.get);
-		
-		repository.save(tarefas);
+	    Tarefas tarefasCompleta = new Tarefas(
+	    		tarefas.getPrioridade(),
+	    		tarefas.getCategoria(),
+	    		tarefas.getNome(),
+	    		usuario
+	    		);
+	    
+		repository.save(tarefasCompleta);
 
 	}
-	public void save(Tarefas tarefas) {
-		
-		
-	}
+
 }
