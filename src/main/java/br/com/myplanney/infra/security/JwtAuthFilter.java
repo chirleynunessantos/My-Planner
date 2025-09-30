@@ -15,7 +15,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 @Component
-public class ConfAuthentication extends OncePerRequestFilter {
+public class JwtAuthFilter extends OncePerRequestFilter {
 
 	@Autowired
 	TokenService tokenService;
@@ -24,20 +24,27 @@ public class ConfAuthentication extends OncePerRequestFilter {
 	
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		
-		var token = tokenService.buscarToken(request);
-		
-		if(token != null) {
-			var login = tokenService.buscarLogin(token);
-			UserDetails usuario = repository.findByEmail(login).orElseThrow(()->new RuntimeException("Usuario não encontrado"));
-			var userNamePassword = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-			SecurityContextHolder.getContext().setAuthentication(userNamePassword);
-		
-		}else {
-			filterChain.doFilter(request, response);
-		}
-		
+	        throws ServletException, IOException {
+	    
+	    var token = tokenService.buscarToken(request);
+	    
+	    if(token != null) {
+	        var login = tokenService.buscarLogin(token);
+	        
+	        // Use findByEmail para garantir que o resultado da busca exista
+	        UserDetails usuario = repository.findByEmail(login)
+	            .orElse(null); // Retorna null se não encontrar o usuário
+
+	        if(usuario != null) {
+	            var userNamePassword = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+	            SecurityContextHolder.getContext().setAuthentication(userNamePassword);
+	        }
+	    }
+	    
+	    // ESTE É O PONTO CRÍTICO: Chame o próximo filtro/controller SEMPRE.
+	    // Se o token for válido, o usuário já estará no contexto.
+	    // Se o token for nulo ou inválido, o próximo filtro (Authorizer) bloqueará a requisição se for para um endpoint protegido.
+	    filterChain.doFilter(request, response);
 	}
 
 }

@@ -28,7 +28,7 @@ public class TokenService {
 			String token = JWT.create()				
 					.withIssuer("api-myplanner")	
 					.withExpiresAt(tempoToken())
-					//.withSubject(usuario.getEmail())				    
+					.withSubject(usuario.getEmail())				    
 					.sign(algoritimo);	
 					
 			return token;	

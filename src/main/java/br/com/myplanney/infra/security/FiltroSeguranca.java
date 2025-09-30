@@ -33,10 +33,10 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 
 @Configuration
 @EnableWebSecurity
-public class ConfiguracoesSeguranca {
+public class FiltroSeguranca {
 
 	@Autowired
-	ConfAuthentication confAuthentication;
+	JwtAuthFilter jwtAuthFilter;
 
 	@Autowired
 	UsuarioDetailsSeviceImpl usuarioDetailsSeviceImpl;
@@ -45,10 +45,11 @@ public class ConfiguracoesSeguranca {
 	SecurityFilterChain filtrosSeguranca(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/auth/login")
-						.permitAll().requestMatchers(HttpMethod.POST, "/auth/registrar").permitAll().anyRequest()
+				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+						.requestMatchers(HttpMethod.POST, "/auth/registrar").permitAll().anyRequest()
 						.authenticated())
-				.addFilterBefore(confAuthentication, UsernamePasswordAuthenticationFilter.class).build();
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class).build();
 
 	}
 
