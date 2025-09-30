@@ -1,104 +1,114 @@
 package br.com.myplanney.core.usuario.model;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.List; // Importação necessária para List.of()
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import java.util.HashSet;
+import java.util.Set;
 import br.com.myplanney.core.enuns.UsuarioRole;
-import jakarta.annotation.Generated;
+import br.com.myplanney.core.habitos.model.Habitos;
+import br.com.myplanney.core.tarefas.model.Tarefas;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="USUARIO")
+@Table(name = "USUARIO")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Usuario implements UserDetails {
-	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
-	
 
-	@Column(unique=true,name="email")
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(unique = true, name = "email")
 	private String email;
-	
+
 	private String nome;
-	
-	private String senha;
-	
+
+	private String senha; // O nome 'senha' é um nome comum em português para 'password'
+
 	private UsuarioRole role;
+
+	
+	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Tarefas> tarefas = new  HashSet<Tarefas>(); // O atributo Tarefas deve ser um Collection (como List)
+
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Habitos> habitos = new HashSet<Habitos>();
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+
 		
-		
-		if(this.role == UsuarioRole.DESENVOLVERDOR) {
-			return List.of(new SimpleGrantedAuthority("ADMIN"),new SimpleGrantedAuthority("USER"));
+		if (this.role == UsuarioRole.DESENVOLVEDOR) {
+			
+			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
 		}
-		return List.of(new SimpleGrantedAuthority("USER"));	}
+		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	}
+
+
 	@Override
 	public String getPassword() {
+
 		return senha;
 	}
+
 	@Override
 	public String getUsername() {
-		
+
 		return email;
 	}
-	public Usuario(String email2, String nome2, String senha2, UsuarioRole role2) {
-		this.email=email2;
-		this.nome = nome2;
-		this.senha = senha2;
-		this.role = role2;
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true; 
 	}
-	public Long getId() {
-		return id;
+
+
+
+
+	@Override
+	public boolean isEnabled() {
+		return true; // Exemplo: Conta ativa
 	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
+
+
+	public Usuario(String email, String nome, String senha, UsuarioRole role) {
+		super();
 		this.email = email;
-	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
 		this.nome = nome;
-	}
-	public String getSenha() {
-		return senha;
-	}
-	public void setSenha(String senha) {
 		this.senha = senha;
-	}
-	public UsuarioRole getRole() {
-		return role;
-	}
-	public void setRole(UsuarioRole role) {
 		this.role = role;
 	}
-	
-	
+
+
+	public Usuario(Long id, String email, String nome, String senha, UsuarioRole role) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.nome = nome;
+		this.senha = senha;
+		this.role = role;
+	}
+
 }

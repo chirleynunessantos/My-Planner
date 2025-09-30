@@ -36,4 +36,22 @@ public class UsuarioService {
 		repository.save(usuarioAlterado);
 		return mapper.paraUsuarioDTO(usuarioAlterado);
 	}
+
+	public void deletarUsuario(String email) {
+	
+		 repository.deleteByEmail(email);
+	}
+
+	public Usuario alterarUsuario(Usuario usuario) {
+		Long id = repository.getIdByEmail(usuario.getEmail());
+		Usuario usuarioAlterado = new Usuario(
+				id,
+				usuario.getEmail(),
+				usuario.getNome(), 
+				usuario.getSenha(),
+				usuario.getRole()
+				);
+		
+	return repository.save(usuarioAlterado);
+	}
 }
