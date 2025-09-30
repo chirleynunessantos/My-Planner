@@ -8,8 +8,8 @@ import br.com.myplanney.core.usuario.model.Usuario;
 import br.com.myplanney.dto.request.UsuarioRequestDTO;
 import br.com.myplanney.dto.response.UsuarioResponseDTO;
 
-@Mapper(componentModel = "spring") // Isso é o suficiente para o Spring
-public interface UsuarioMapper {
+@Mapper( componentModel = "spring") 
+public interface UsuarioMapper{
 
 	@Mapping(target="id", ignore=true)
 	Usuario paraUsuario(UsuarioRequestDTO usuarioRequestDTO);

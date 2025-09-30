@@ -19,17 +19,23 @@ import lombok.Setter;
 @Table(name="habitos")
 @Builder
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Habitos {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	String nome;
-	int quantDiasCheck;
+	private String id;
+	private String nome;
+	private int quantDiasCheck;
 	
 	@ManyToOne
 	@JoinColumn(name="id_usuario")
 	Usuario usuario;
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
+	
 }

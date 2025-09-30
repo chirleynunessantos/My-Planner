@@ -22,6 +22,8 @@ public class HabitosService {
 		String email = usuarioAuth.getName();
 		Usuario usuarioBD = (Usuario) usuarioRepository.findByEmail(email).orElseThrow();
 		
-		return repository.save(null);
+		habitos.setUsuario(usuarioBD);
+		
+		return repository.save(habitos);
 	}
 }
