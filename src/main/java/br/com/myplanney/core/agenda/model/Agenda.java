@@ -1,22 +1,24 @@
 package br.com.myplanney.core.agenda.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import br.com.myplanney.core.enuns.Prioridade;
-import br.com.myplanney.core.tarefas.model.Tarefas;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-/*@Entity
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
 @Table(name="agenda")
-@Data
-@Builder*/
 public class Agenda {
 
 	@Id
