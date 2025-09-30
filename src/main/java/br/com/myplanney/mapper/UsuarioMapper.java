@@ -17,4 +17,5 @@ public interface UsuarioMapper {
 // Geralmente, o ID não deve ser ignorado no DTO de resposta.
 
 	UsuarioResponseDTO paraUsuarioDTO(Usuario usuario);
+	
 }
